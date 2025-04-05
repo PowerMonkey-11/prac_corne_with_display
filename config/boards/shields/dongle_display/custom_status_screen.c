@@ -56,13 +56,13 @@ lv_obj_t *zmk_display_status_screen() {
     zmk_widget_layer_status_init(&layer_status_widget, screen);
     lv_obj_align_to(zmk_widget_layer_status_obj(&layer_status_widget), zmk_widget_bongo_cat_obj(&bongo_cat_widget), LV_ALIGN_BOTTOM_LEFT, 0, 5);
 
-    // Initialize left battery widget only if not already initialized
+    // Ensure left battery widget is initialized once
     if (!left_battery_widget.obj) {
         zmk_widget_peripheral_battery_status_init(&left_battery_widget, screen);
         lv_obj_align(zmk_widget_peripheral_battery_status_obj(&left_battery_widget), LV_ALIGN_TOP_RIGHT, 0, 0);
     }
     
-    // Initialize right battery widget only if not already initialized
+    // Ensure right battery widget is initialized once
     if (!right_battery_widget.obj) {
         zmk_widget_peripheral_battery_status_init(&right_battery_widget, screen);
         lv_obj_align_to(zmk_widget_peripheral_battery_status_obj(&right_battery_widget),
@@ -72,4 +72,5 @@ lv_obj_t *zmk_display_status_screen() {
 
     return screen;
 }
+
 
