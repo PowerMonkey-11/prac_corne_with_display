@@ -28,6 +28,10 @@ static struct zmk_widget_hid_indicators hid_indicators_widget;
 
 lv_style_t global_style;
 
+// Add initialization flags
+static bool left_battery_initialized = false;
+static bool right_battery_initialized = false;
+
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen;
 
@@ -56,26 +60,25 @@ lv_obj_t *zmk_display_status_screen() {
     zmk_widget_layer_status_init(&layer_status_widget, screen);
     lv_obj_align_to(zmk_widget_layer_status_obj(&layer_status_widget), zmk_widget_bongo_cat_obj(&bongo_cat_widget), LV_ALIGN_BOTTOM_LEFT, 0, 5);
 
-    // Explicitly reset widget objects before checking initialization
-    left_battery_widget.obj = NULL;
-    right_battery_widget.obj = NULL;
-
-    // Ensure left battery widget is initialized once
-    if (!left_battery_widget.obj) {
+    // Initialize left battery widget only if it's not initialized
+    if (!left_battery_initialized) {
         zmk_widget_peripheral_battery_status_init(&left_battery_widget, screen);
         lv_obj_align(zmk_widget_peripheral_battery_status_obj(&left_battery_widget), LV_ALIGN_TOP_RIGHT, 0, 0);
+        left_battery_initialized = true;  // Set flag to true after initialization
     }
 
-    // Ensure right battery widget is initialized once
-    if (!right_battery_widget.obj) {
+    // Initialize right battery widget only if it's not initialized
+    if (!right_battery_initialized) {
         zmk_widget_peripheral_battery_status_init(&right_battery_widget, screen);
         lv_obj_align_to(zmk_widget_peripheral_battery_status_obj(&right_battery_widget),
                         zmk_widget_peripheral_battery_status_obj(&left_battery_widget),
                         LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 2);
+        right_battery_initialized = true;  // Set flag to true after initialization
     }
 
     return screen;
 }
+
 
 
 
