@@ -60,9 +60,11 @@ lv_obj_t *zmk_display_status_screen() {
     zmk_widget_peripheral_battery_status_init(&left_battery_widget, screen);
     lv_obj_align(zmk_widget_peripheral_battery_status_obj(&left_battery_widget), LV_ALIGN_TOP_RIGHT, 0, 0);  // Adjust position
     
-    zmk_widget_peripheral_battery_status_init(&right_battery_widget, screen);
-    lv_obj_align_to(zmk_widget_peripheral_battery_status_obj(&right_battery_widget),zmk_widget_peripheral_battery_status_obj(&left_battery_widget),
-    LV_ALIGN_OUT_BOTTOM_RIGHT, 0,2);
+    if (!right_battery_widget.obj) {  // Only initialize right battery widget if not already initialized
+        zmk_widget_peripheral_battery_status_init(&right_battery_widget, screen);
+        lv_obj_align_to(zmk_widget_peripheral_battery_status_obj(&right_battery_widget),
+                        zmk_widget_peripheral_battery_status_obj(&left_battery_widget),
+                        LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 2)
 
     return screen;
 }
