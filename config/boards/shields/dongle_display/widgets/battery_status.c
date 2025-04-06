@@ -82,11 +82,22 @@ void battery_status_update_cb(struct peripheral_battery_state state) {
 
 static struct peripheral_battery_state battery_status_get_state(const zmk_event_t *eh) {
     const struct zmk_peripheral_battery_state_changed *ev = as_zmk_peripheral_battery_state_changed(eh);
-    return (struct peripheral_battery_state){
-        .source = ev->source,
-        .level = ev->state_of_charge,
+    
+    // Ensure source matches and return correct state
+    if (ev->source == 0 || ev->source == 1) {  // Ensure this is only for the correct sources
+        return (struct peripheral_battery_state) {
+            .source = ev->source,
+            .level = ev->state_of_charge,
+        };
+    }
+
+    // Default (in case other sources or errors occur)
+    return (struct peripheral_battery_state) {
+        .source = 255,  // Error code for no battery info
+        .level = 0,
     };
 }
+
 
 ZMK_DISPLAY_WIDGET_LISTENER(widget_battery_status, struct peripheral_battery_state,
                             battery_status_update_cb, battery_status_get_state)
