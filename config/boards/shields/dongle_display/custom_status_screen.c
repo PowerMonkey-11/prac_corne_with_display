@@ -17,8 +17,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static struct zmk_widget_output_status output_status_widget;
 static struct zmk_widget_layer_status layer_status_widget;
-static struct zmk_widget_peripheral_battery_status left_battery_widget;
-static struct zmk_widget_peripheral_battery_status right_battery_widget;
+static struct zmk_widget_peripheral_battery_status peripheral_battery_status_widget;
 static struct zmk_widget_modifiers modifiers_widget;
 static struct zmk_widget_bongo_cat bongo_cat_widget;
 
@@ -57,16 +56,8 @@ lv_obj_t *zmk_display_status_screen() {
     // lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_BOTTOM_LEFT, 2, -18);
     lv_obj_align_to(zmk_widget_layer_status_obj(&layer_status_widget), zmk_widget_bongo_cat_obj(&bongo_cat_widget), LV_ALIGN_BOTTOM_LEFT, 0, 5);
 
-    // Set source before initialization
-    left_battery_widget.source = 0;  // For the left battery
-    zmk_widget_peripheral_battery_status_init(&left_battery_widget, screen);
-    lv_obj_align(zmk_widget_peripheral_battery_status_obj(&left_battery_widget), LV_ALIGN_TOP_LEFT, 0, 0);  // Top-left positioning
-    
-    right_battery_widget.source = 1;  // For the right battery
-    zmk_widget_peripheral_battery_status_init(&right_battery_widget, screen);
-    lv_obj_align_to(zmk_widget_peripheral_battery_status_obj(&right_battery_widget),
-                    zmk_widget_peripheral_battery_status_obj(&left_battery_widget),
-                    LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 2);  // Positioned under left battery
+    zmk_widget_peripheral_battery_status_init(&peripheral_battery_status_widget, screen);
+    lv_obj_align(zmk_widget_peripheral_battery_status_obj(&peripheral_battery_status_widget), LV_ALIGN_TOP_RIGHT, 0, 0);
 
     return screen;
 }
