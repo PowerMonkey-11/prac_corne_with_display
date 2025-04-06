@@ -71,9 +71,14 @@ static void set_battery_symbol(lv_obj_t *widget, struct peripheral_battery_state
 }
 
 void battery_status_update_cb(struct peripheral_battery_state state) {
-    struct zmk_widget_battery_status *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_symbol(widget->obj, state); }
+    struct zmk_widget_peripheral_battery_status *widget;
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
+        if (widget->source == state.source) {
+            set_battery_symbol(widget->obj, state);
+        }
+    }
 }
+
 
 static struct peripheral_battery_state battery_status_get_state(const zmk_event_t *eh) {
     const struct zmk_peripheral_battery_state_changed *ev = as_zmk_peripheral_battery_state_changed(eh);
